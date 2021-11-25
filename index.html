@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <title>test</title>
+    <link rel="stylesheet" href="">
+
+
+    <script type="text/javascript">
+        function streameur( i ) {
+            console.log("debut fonction");
+            var xhr = new XMLHttpRequest({mozSystem: true});
+
+            xhr.open("GET", "https://api.twitch.tv/helix/streams?user_login=" + login[i], true);
+
+            xhr.setRequestHeader("Client-ID", "ill7syanli5xbcv6yjt3yvlszx2wuy");
+            xhr.setRequestHeader("Authorization", /*token*/ "Bearer aiu35qmq86ftpqjp5m0k6njggczj8t");
+            xhr.onreadystatechange = function () {
+
+                if (xhr.readyState === 4) {
+                    tab = JSON.parse(xhr.responseText);
+
+                    if (tab.data.length !== 0) {
+
+                        /*console.log("toto");*/
+                        if(game !== tab.data[0].game_name){
+
+                            game = tab.data[0].game_name;
+                            /*console.log("game est : " + game);*/
+                            css(game);
+                        }
+
+                        //stream on
+                    } else {
+                        //stream off
+                        /*console.log("toto2");*/
+
+                        game = "offline";
+                        css(game);
+                    }
+
+                }
+
+            }
+            xhr.send();
+		  upplayer(i);
+        }
+
+        function css(a){
+            var i;
+            /*console.log(a)*/
+
+            nomjeux(a);
+            if (i_css != -1){
+                document.remove;
+                var lien_css = document.querySelector('link');
+                /*console.log(jeux[1][i_css])*/
+                lien_css.setAttribute("href","style/"+jeux[1][i_css]+".css");
+                lien_css.setAttribute("rel","stylesheet");
+                lien_css.setAttribute("type","text/css");
+
+            } else {
+                document.remove;
+                var lien_css = document.querySelector('link');
+                lien_css.setAttribute("href","style/default.css");
+                lien_css.setAttribute("rel","stylesheet");
+                lien_css.setAttribute("type","text/css");
+            }
+        }
+
+        function nomjeux(a){
+            for (var i=0;i<jeux[1].length;i++){
+                a=a.toLowerCase();
+                if (a.indexOf(jeux[0][i]) != -1){
+                    i_css=i;
+                    /*console.log("jeux ok")*/
+                    return 0
+                }
+            }
+            i_css=-1;
+            return 0
+        }
+
+        function nav(){
+            listeLogin="";
+
+            for (var j=0;j<login.length;j++){
+                if( j!==stream){
+                    document.getElementsById('nav').innerHTML += "<li onclick='upplayer("+j+")'>"+j+"</li>";
+
+                }
+            }
+        }
+
+
+
+        function upplayer(i){
+            playerTwitch.setChannel(login[i]);
+            stream = i;
+            nav();
+
+
+        }
+	  
+
+    </script>
+
+</head>
+<body>
+
+
+<div class="">
+    <script type="text/javascript">
+
+        var stream=0;
+
+        var i_css=-1;
+        var jeux=[["rainbow six siege","resident evil","pokémon","apex"],["r6","RE","pokemon","apex"]]
+
+        var login =["taylien","kitty_r6","aiola","raptorrouge","dovabear","gotaga"];
+        var donnee = new Array(login.length);
+        /* console.log(donnee);*/
+        var game;
+        var tab;
+	    var playerTwitch;
+
+        var larg = (document.body.clientWidth);
+        var haut = (document.body.clientHeight);
+
+        var listeLogin;
+
+        nav();
+
+        streameur(stream);
+        /*console.log(donnee);*/
+        setInterval(console.log("toto"), 1000);
+
+
+
+
+    </script>
+
+
+    <div id="nav">
+
+
+
+    </div>
+
+
+
+
+
+
+    <!-- Add a placeholder for the Twitch embed -->
+    <div id="twitch-embed live">
+
+        <!-- Load the Twitch embed script -->
+        <script src="https://embed.twitch.tv/embed/v1.js"></script>
+
+        <!-- Create a Twitch.Embed object that will render within the "twitch-embed" root element. -->
+        <script type="text/javascript">
+            /*new Twitch.Embed("twitch-embed", {
+                width: 542 ,
+                height: 361 ,
+                channel: ,
+                // only needed if your site is also embedded on embed.example.com and othersite.example.com
+                parent: ["embed.example.com", "othersite.example.com"]
+            });*/
+        </script>
+
+
+        <div id="SamplePlayerDivID">
+            <script type="text/javascript">
+
+                var options = {
+                    width: 1280,
+                    height: 720,
+                    channel: login[stream],
+                    // only needed if your site is also embedded on embed.example.com and othersite.example.com
+                    parent: []
+                };
+                var playerTwitch = new Twitch.Player("SamplePlayerDivID", options);
+
+            </script>
+        </div>
+
+
+        <iframe id="chat_embed"
+                height="1000"
+                width="500">
+        </iframe>
+
+        <script>
+
+            if (larg>=1920 || haut>=1080)
+            {
+                var tchat = document.querySelector('iframe#chat_embed');
+                tchat.setAttribute("src","https://www.twitch.tv/embed/"+login[stream]+ "/chat?parent=raptorrouge.fr");
+                tchat.setAttribute("height","722");
+                tchat.setAttribute("width","350");
+            } else if(larg<1920 || haut<1080)
+            {
+                var tchat = document.querySelector('iframe#chat_embed');
+                tchat.setAttribute("src","https://www.twitch.tv/embed/"+login[stream]+ "/chat?parent=raptorrouge.fr");
+                tchat.setAttribute("height","361");
+                tchat.setAttribute("width","175");
+            }
+
+
+
+
+        </script>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+</div>
+
+
+
+</div>
+
+</body>
+</html>
